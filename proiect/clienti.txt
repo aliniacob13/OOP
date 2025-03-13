@@ -19,3 +19,31 @@ Abonament: Nu
 Caz special: Da
 Caz special: Pensionar/persoana cu dizabilitati
 Fonduri disponibile: 10 RON
+Nume: Anton
+Prenume: Mariana
+ID: AntonMariana446
+Abonament: Nu
+Caz special: Nu
+Caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 0 RON
+Nume: Nistor
+Prenume: Daniela
+ID: NistorDaniela688
+Abonament: Nu
+Caz special: Nu
+Caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 9 RON
+Nume: Popa
+Prenume: Marian
+ID: PopaMarian103
+Abonament: Nu
+Caz special: Nu
+Caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 0 RON
+Nume: Bratoveanu
+Prenume: Nicolas
+ID: BratoveanuNicolas236
+Abonament: Nu
+Caz special: Da
+Caz special: Elev/Student
+Fonduri disponibile: 1000 RON

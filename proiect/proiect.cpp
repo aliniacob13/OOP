@@ -5,6 +5,8 @@
 #include <cstring>
 #include <cstdlib>
 #include <ctime>
+#include <termios.h> // For termios, tcsetattr, tcgetattr
+#include <unistd.h>  // For STDIN_FILENO
 std::ofstream g("clienti.txt", std::ios::app);
 // class Portofel;
 class Client;
@@ -63,6 +65,7 @@ class Client
 {
     std::string nume;
     std::string prenume;
+    std::string password;
     std::string id;
     bool are_abonament;
     Portofel portofel;
@@ -70,10 +73,11 @@ class Client
     std::string caz;
 
 public:
-    Client(std::string nume, std::string prenume, std::string id, bool are_abonament, Portofel portofel, bool caz_special, std::string caz = "Nu se incadreaza in niciun caz special")
+    Client(std::string nume, std::string prenume, std::string password,std::string id, bool are_abonament, Portofel portofel, bool caz_special, std::string caz = "Nu se incadreaza in niciun caz special")
     {
         this->nume = nume;
         this->prenume = prenume;
+        this->password = password;
         this->id = id;
         this->are_abonament = are_abonament;
         this->portofel = portofel;
@@ -85,6 +89,7 @@ public:
     {
         this->nume = client.nume;
         this->prenume = client.prenume;
+        this->password = client.password;
         this->id = client.id;
         this->are_abonament = client.are_abonament;
         this->portofel = client.portofel;
@@ -93,6 +98,7 @@ public:
     }
     std::string getNume() const { return nume; }
     std::string getPrenume() const { return prenume; }
+    std::string getPassword() const { return password; }
     std::string getId() const { return id; }
     bool getAreAbonament() const { return are_abonament; }
     bool getCazSpecial() const { return caz_special; }
@@ -135,7 +141,50 @@ void Portofel::afisareFonduri(const Client& client) const
     std::cout << "Tip abonament: " << this->tip_abonament << "\n";
     std::cout << "Tip abonament special: " << client.getCaz() << "\n";
 }
+std::string getHiddenPassword() {
+    std::cout << "Creati parola pentru contul dumneavoastra:" << std::endl;
 
+    // Save current terminal settings.
+    struct termios oldt, newt;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+
+    // Turn off ECHO and canonical mode (character-by-character input)
+    newt.c_lflag &= ~(ECHO | ICANON);
+    newt.c_cc[VMIN] = 1;  // minimum number of characters to read
+    newt.c_cc[VTIME] = 0; // no timeout
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    std::string password;
+    char ch;
+    while (true) {
+        // Use read() to get one character from standard input
+        if (read(STDIN_FILENO, &ch, 1) != 1)
+            break;
+        
+        if (ch == '\n' || ch == '\r') {
+            std::cout << std::endl;
+            break;
+        }
+        else if (ch == 127 || ch == '\b') {  // handle backspace (127 or '\b')
+            if (!password.empty()) {
+                password.pop_back();
+                // Move cursor back, overwrite the character with space, and move back again.
+                std::cout << "\b \b";
+                std::cout.flush();
+            }
+        }
+        else {
+            password.push_back(ch);
+            std::cout << '*';
+            std::cout.flush();
+        }
+    }
+
+    // Restore original terminal settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return password;
+}
 int main()
 {
     const int bilet_metro = 5;
@@ -147,6 +196,9 @@ int main()
     const int abonament_special_metro=10;
     const int abonament_special_suprafata=5;
     std::vector<Client *> clienti;
+    bool exit=false;
+    while(!exit)
+    {
     std::string raspuns;
     std::cout << "Ai cont?\n";
     std::cin >> raspuns;
@@ -157,6 +209,9 @@ int main()
         std::cin >> nume;
         std::cout << "Introduceti prenumele\n";
         std::cin >> prenume;
+        //std::cout<<"Creati parola pentru contul dumneavoastra:\n";
+        std::string pass = getHiddenPassword();
+        //std::cout << "Parola dumneavoastra: " << pass << std::endl;
         std::string id = generateID(nume, prenume);
         std::cout << "ID-ul dumneavoastra este: " << id << "\n";
         std::cout << "Ai abonament?\n"
@@ -202,7 +257,7 @@ int main()
         int suma;
         std::cin >> suma;
         portofel.setFonduri(suma);
-        Client *client = new Client(nume, prenume, id, areAbonament, portofel, caz_special,caz_special_string);
+        Client *client = new Client(nume, prenume, pass, id, areAbonament, portofel, caz_special,caz_special_string);
         client->afisare();
         g<<"Nume: "<<nume<<"\n";
         g<<"Prenume: "<<prenume<<"\n";
@@ -213,6 +268,12 @@ int main()
         g<<"Fonduri disponibile: "<<suma<<" RON\n"; //aici va trebui modificat, pentru ca isi poate depune si dupa
         //crearea contului
         clienti.push_back(client);
+        std::cout<<"Continuati?\n";
+        std::string continuare;
+        std::cin>>continuare;
+        if(continuare=="Nu")
+            exit=true;
+    }
     }
     if (!clienti.empty())
     {
