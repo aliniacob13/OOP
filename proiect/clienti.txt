@@ -1,0 +1,21 @@
+Nume: Marinescu
+Prenume: Ruxandra
+ID: MarinescuRuxandra711
+Abonament: Nu
+Caz special: Da
+Caz special: Pensionar/persoana cu dizabilitati
+Fonduri disponibile: 200 RON
+Nume: Paun
+Prenume: Andrei
+ID: PaunAndrei833
+Abonament: Da
+Caz special: Nu
+Caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 1000 RON
+Nume: Dumitru
+Prenume: Bogdan
+ID: DumitruBogdan285
+Abonament: Nu
+Caz special: Da
+Caz special: Pensionar/persoana cu dizabilitati
+Fonduri disponibile: 10 RON
