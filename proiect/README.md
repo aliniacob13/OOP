@@ -32,5 +32,6 @@ Aceasta aplicatie simuleaza un sistem de gestionare al biletelor si abonamentelo
 ### Idei, remindere, intrebari 
 1. Pentru proiectul al doilea, as dori sa folosesc inheritance pe anumite clase, cum ar fi **staff** si **mijloc de transport** si **client**.
 2. Cum pot face sa memorez obiectele create, in cazul meu, clientii si angajatii, si dupa terminarea programului?
-3. **Reminder for me**: Sa pun functii de afisare la clasele recent create!
-4. Daca ai intrebari, te rog sa ma contactezi la adresa [aliniacob13@yahoo.com](aliniacob13@yahoo.com)
+3. Ar exista alta modalitate mai simpla si mai clean pentru functia **getHiddenPassword**? 
+4. **Reminder for me**: Sa pun functii de afisare la clasele recent create!
+5. Daca ai intrebari, te rog sa ma contactezi la adresa [aliniacob13@yahoo.com](aliniacob13@yahoo.com)
