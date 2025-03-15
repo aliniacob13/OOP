@@ -26,7 +26,7 @@ Aceasta aplicatie simuleaza un sistem de gestionare al biletelor si abonamentelo
    * pret
 4. Portofel
    * fonduri
-   * are_bilet(bool) **e redundant, stiu, se repeta cu putin cu ce este in Client, dar o sa modific**
+   * are_bilet(bool) **e redundant, stiu, se repeta putin cu ce este in Client, dar o sa modific**
    * are_abonament(bool)
    * tip_abonament  
 ### Idei, remindere, intrebari 
