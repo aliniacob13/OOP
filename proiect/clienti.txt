@@ -47,3 +47,10 @@ Abonament: Nu
 Caz special: Da
 Caz special: Elev/Student
 Fonduri disponibile: 1000 RON
+Nume: Petcu
+Prenume: Eva
+ID: PetcuEva490
+Abonament: Nu
+Caz special: Da
+Caz special: Elev/Student
+Fonduri disponibile: 10 RON
