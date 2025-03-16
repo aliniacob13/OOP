@@ -9,39 +9,44 @@
 #include <unistd.h>  // For STDIN_FILENO
 std::ofstream g("clienti.txt", std::ios::app);
 // class Portofel;
-class staff{
+class staff
+{
     const std::string nume;
     const std::string prenume;
     const std::string email;
     const std::string password;
     const std::string pozitie;
 
-    public:
-    staff(const std::string &nume, const std::string &prenume, const std::string &email, const std::string &password, const std::string &pozitie): nume(nume), prenume(prenume), email(email), password(password), pozitie(pozitie){}
-    staff(const staff &other): nume(other.nume), prenume(other.prenume), email(other.email), password(other.password), pozitie(other.pozitie){}
-    ~staff(){}
+public:
+    staff(const std::string &nume, const std::string &prenume, const std::string &email, const std::string &password, const std::string &pozitie) : nume(nume), prenume(prenume), email(email), password(password), pozitie(pozitie) {}
+    staff(const staff &other) : nume(other.nume), prenume(other.prenume), email(other.email), password(other.password), pozitie(other.pozitie) {}
+    ~staff() {}
     std::string getNume() const { return nume; }
     std::string getPrenume() const { return prenume; }
     std::string getEmail() const { return email; }
     std::string getPassword() const { return password; }
     std::string getPozitie() const { return pozitie; }
     /// i need to add a function that can change the password(cu pointeri ca sa pot distruge bariera de protectie)
-    ///vezi curs paun ca sa vezi cum se face
+    /// vezi curs paun ca sa vezi cum se face
 };
 class mijloc_transport
 {
     const std::string tip;
-    const int pret;
+    //const int pret;
+    const int pret_bilet;
+    const int pret_abonament_zi;
+    const int pret_abonament_saptamana;
+    const int pret_abonament_luna;
 
 public:
-    mijloc_transport(const std::string &t, const int &p): tip(t), pret(p){} // Constructor
-    mijloc_transport(const mijloc_transport &other): tip(other.tip), pret(other.pret){} // Copy constructor
+    mijloc_transport(const std::string &t, const int &p, const int &pz, const int &ps, const int &pl) : tip(t), pret_bilet(p), pret_abonament_zi(pz), pret_abonament_saptamana(ps), pret_abonament_luna(pl)  {}             // Constructor
+    mijloc_transport(const mijloc_transport &other) : tip(other.tip), pret_bilet(other.pret_bilet), pret_abonament_zi(other.pret_abonament_zi), pret_abonament_saptamana(other.pret_abonament_saptamana), pret_abonament_luna(other.pret_abonament_luna) {} // Copy constructor
     ~mijloc_transport()
     {
         // nu stiu daca trebuie sa pun ceva aici
     }
     std::string getTip() const { return tip; }
-    int getPret() const { return pret; }
+    int getPretBilet() const { return pret_bilet; }
 };
 class Client;
 class Portofel
@@ -123,6 +128,11 @@ public:
         this->caz_special = client.caz_special;
         this->caz = client.caz;
     }
+    //settere
+    void set_password(std::string password){
+        this->password=password;
+    }
+
     std::string getNume() const { return nume; }
     std::string getPrenume() const { return prenume; }
     std::string getPassword() const { return password; }
@@ -145,6 +155,9 @@ public:
         portofel.afisareFonduri(*this);
     }
     ~Client() {}
+    void depunere(int suma) {
+        portofel.depunere(suma);
+    }
     friend std::string generateID(const std::string &nume, const std::string &prenume);
     // friend std::ofstream& operator<<(std::ofstream& os, const Client& client);
     friend std::string getTipAbonamentSpecial(const Client &client);
@@ -220,7 +233,7 @@ std::string getHiddenPassword()
 }
 int main()
 {
-    //o sa trebuiasca sa elimin aceste const-uri
+    // o sa trebuiasca sa elimin aceste const-uri
     const int bilet_metro = 5;
     const int bilet_suprafata = 3;
     const int abonament_metro_luna = 100;
@@ -229,175 +242,299 @@ int main()
     const int abonament_suprafata = 50;
     const int abonament_special_metro = 10;
     const int abonament_special_suprafata = 5;
-    mijloc_transport metro("Metro", 5);
-    mijloc_transport tramvai("Tramvai", 3);
-    mijloc_transport autobuz("Autobuz", 4);
-    std::cout<<"Pretul unui bilet de tramvai este: "<<tramvai.getPret()<<" RON\n";
+    mijloc_transport metro("Metro", 5, 10, 30, 100);
+    mijloc_transport tramvai("Tramvai", 3, 7, 25, 70);
+    mijloc_transport autobuz("Autobuz", 4, 10, 27, 65);
+    std::cout << "Pretul unui bilet de tramvai este: " << tramvai.getPretBilet() << " RON\n";
     std::vector<Client *> clienti;
+    std::vector<staff *> angajati;
     bool exit = false;
-    staff boss("Andrei","Paun","apaun@yahoo.com","1234","Manager");
+    std::cout << "Bun venit la aplicatia de transport!\n";
+    staff boss("Andrei", "Paun", "apaun@yahoo.com", "1234", "Manager");
     while (!exit)
-    {   
-        std::cout << "Bun venit la aplicatia de transport!\n";
-        std::cout <<"Client/ Staff?\n";
+    {
+        std::cout << "Client/Staff?\n";
         std::string client_staff;
-        std::cin>>client_staff;
-        if(client_staff=="Client")
-        { 
-        std::string raspuns;
-        std::cout << "Ai cont?\n";
-        std::cin >> raspuns;
-        if (raspuns == "Nu")
+        std::cin >> client_staff;
+        if (client_staff == "Client")
         {
-            std::cout << "Introduceti numele\n";
-            std::string nume, prenume;
-            std::cin >> nume;
-            std::cout << "Introduceti prenumele\n";
-            std::cin >> prenume;
-            // std::cout<<"Creati parola pentru contul dumneavoastra:\n";
-            std::string pass = getHiddenPassword();
-            // std::cout << "Parola dumneavoastra: " << pass << std::endl;
-            std::string id = generateID(nume, prenume);
-            std::cout << "ID-ul dumneavoastra este: " << id << "\n";
-            std::cout << "Ai abonament?\n"
-                      << "Da/Nu\n";
-            bool areAbonament;
-            std::string are_abonament;
-            std::cin >> are_abonament;
-            if (are_abonament == "Da")
-                areAbonament = true;
-            else
-                areAbonament = false;
-            Portofel portofel;
-            bool caz_special;
-            std::string caz_special_string, da_nu;
-            std::cout << "Te incadrezi intr-un caz special?\n";
-            std::cout << "Introduceti 'Da' sau 'Nu'\n";
-            std::cin >> da_nu;
-            if (da_nu == "Da")
-                caz_special = true;
-            else
-                caz_special = false;
-            int caz = 0;
-            // std::string caz_special_string;
-            if (caz_special == true)
+            std::string raspuns;
+            std::cout << "Ai cont?\n";
+            std::cin >> raspuns;
+            if (raspuns == "Nu")
             {
-                std::cout << "Introduceti cazul special in care va incadrati:\n";
-                std::cout << "1. Elev/Student\n";
-                std::cout << "2. Pensionar/persoana cu dizabilitati\n";
-                std::cout << "3. Salariat cu venitul minim pe economie\n";
+                std::cout << "Introduceti numele\n";
+                std::string nume, prenume;
+                std::cin >> nume;
+                std::cout << "Introduceti prenumele\n";
+                std::cin >> prenume;
+                // std::cout<<"Creati parola pentru contul dumneavoastra:\n";
+                std::string pass = getHiddenPassword();
+                // std::cout << "Parola dumneavoastra: " << pass << std::endl;
+                std::string id = generateID(nume, prenume);
+                std::cout << "ID-ul dumneavoastra este: " << id << "\n";
+                std::cout << "Ai abonament?\n"
+                          << "Da/Nu\n";
+                bool areAbonament;
+                std::string are_abonament;
+                std::cin >> are_abonament;
+                if (are_abonament == "Da")
+                    areAbonament = true;
+                else
+                    areAbonament = false;
+                Portofel portofel;
+                bool caz_special;
+                std::string caz_special_string, da_nu;
+                std::cout << "Te incadrezi intr-un caz special?\n";
+                std::cout << "Introduceti 'Da' sau 'Nu'\n";
+                std::cin >> da_nu;
+                if (da_nu == "Da")
+                    {
+                        caz_special = true;
+                        std::cout<<"Trebuie sa mergeti la o casa de bilete pentru a va face abonamentul special.\n";
+                    }
+                else
+                    caz_special = false;
+                int caz = 0;
+                // std::string caz_special_string;
 
-                std::cin >> caz;
+                // if (caz_special == true)
+                // {
+                //     std::cout << "Introduceti cazul special in care va incadrati:\n";
+                //     std::cout << "1. Elev/Student\n";
+                //     std::cout << "2. Pensionar/persoana cu dizabilitati\n";
+                //     std::cout << "3. Salariat cu venitul minim pe economie\n";
+
+                //     std::cin >> caz;
+                // }
+                // if (caz == 1)
+                //     caz_special_string = "Elev/Student";
+                // else if (caz == 2)
+                //     caz_special_string = "Pensionar/persoana cu dizabilitati";
+                // else if (caz == 3)
+                //     caz_special_string = "Salariat cu venitul minim pe economie";
+                std::cout << "Introduceti suma pe care doriti sa o depuneti in cont:\n";
+                int suma;
+                std::cin >> suma;
+                portofel.setFonduri(suma);
+                Client *client = new Client(nume, prenume, pass, id, areAbonament, portofel, caz_special); //caz_special_string ia val. default
+                client->afisare();
+                g << "Nume: " << nume << "\n";
+                g << "Prenume: " << prenume << "\n";
+                g << "ID: " << id << "\n";
+                g << "Abonament: " << (areAbonament ? "Da" : "Nu") << "\n";
+                g << "Caz special: " << (caz_special ? "Da" : "Nu") << "\n";
+                g << "Caz special: " << caz_special_string << "\n";
+                g << "Fonduri disponibile: " << suma << " RON\n"; // aici va trebui modificat, pentru ca isi poate depune si dupa
+                // crearea contului
+                clienti.push_back(client);
             }
-            if (caz == 0)
-                caz_special_string = "Nu se incadreaza in niciun caz special";
-            else if (caz == 1)
-                caz_special_string = "Elev/Student";
-            else if (caz == 2)
-                caz_special_string = "Pensionar/persoana cu dizabilitati";
-            else if (caz == 3)
-                caz_special_string = "Salariat cu venitul minim pe economie";
-            std::cout << "Introduceti suma pe care doriti sa o depuneti in cont:\n";
-            int suma;
-            std::cin >> suma;
-            portofel.setFonduri(suma);
-            Client *client = new Client(nume, prenume, pass, id, areAbonament, portofel, caz_special, caz_special_string);
-            client->afisare();
-            g << "Nume: " << nume << "\n";
-            g << "Prenume: " << prenume << "\n";
-            g << "ID: " << id << "\n";
-            g << "Abonament: " << (areAbonament ? "Da" : "Nu") << "\n";
-            g << "Caz special: " << (caz_special ? "Da" : "Nu") << "\n";
-            g << "Caz special: " << caz_special_string << "\n";
-            g << "Fonduri disponibile: " << suma << " RON\n"; // aici va trebui modificat, pentru ca isi poate depune si dupa
-            // crearea contului
-            clienti.push_back(client);
         }
-            /*
-            //nu e buna partea asta de cod
-            //aici ar trebui sa fie verificarea unui angajat
-            if(boss.getEmail()==email && boss.getPassword()==password)
-            {
-                found=true;
-            }
-            if(found==true)
-            {
-                std::cout<<"Logare reusita!\n";
-            }
-            
-            else
-            {
-                std::cout<<"Logare nereusita!\n";
-                std::cout<<"Email sau parola gresita!\n";
-            }
-            */
-        }
-        else{
-            std::cout<<"Sign in\n";
+        else
+        {
+            std::cout << "Sign in\n";
             std::string email, password;
             std::string nume, prenume;
-            std::cout<<"Nume: ";
-            std::cin>>nume;
-            std::cout<<"Prenume: ";
-            std::cin>>prenume;
-            std::cout<<"Email: ";
-            std::cin>>email;
-            std::cout<<"Password: ";
-            std::cin>>password;
-            bool found=false;
+            std::cout << "Nume: ";
+            std::cin >> nume;
+            std::cout << "Prenume: ";
+            std::cin >> prenume;
+            std::cout << "Email: ";
+            std::cin >> email;
+            std::cout << "Password: ";
+            std::cin >> password;
+            bool found = false;
             std::string prenume_nume;
-            prenume_nume=prenume+" "+nume;
-            //std::cout<<prenume_nume;
-            if(prenume_nume=="Andrei Paun")
-            {   
-                bool iesire_sesiune=false;
-                if(boss.getEmail()==email && boss.getPassword()==password)
+            prenume_nume = prenume + " " + nume;
+            // std::cout<<prenume_nume;
+            if (prenume_nume == "Andrei Paun")
+            {
+                bool iesire_sesiune = false;
+                if (boss.getEmail() == email && boss.getPassword() == password)
                 {
-                    found=true;
+                    found = true;
                 }
-                if(found==true)
+                if (found == true)
                 {
-                    std::cout<<"Logare reusita!\n";
-                    std::cout<<"Bine ati venit, domnule Paun!\n";
-                    while(!iesire_sesiune)
+                    std::cout << "Logare reusita!\n";
+                    std::cout << "Bine ati venit, domnule Paun!\n";
+                    bool logout = false;
+                    while (!logout)
                     {
-                    std::cout<<"Ce doriti sa faceti?\n";
-                    std::string yes_no;
-                    std::cout<<"Adaugati angajat?\n";
-                    std::cout<<"Da/Nu\n";
-                    std::cin>>yes_no;
-                    if(yes_no=="Da")
-                    {
-                        std::string nume, prenume, email, password, pozitie;
-                        std::cout<<"Nume: ";
-                        std::cin>>nume;
-                        std::cout<<"Prenume: ";
-                        std::cin>>prenume;
-                        std::cout<<"Email: ";
-                        std::cin>>email;
-                        std::cout<<"Password: ";
-                        std::cin>>password;
-                        std::cout<<"Pozitie: ";
-                        std::cin>>pozitie;
-                        staff *angajat=new staff(nume,prenume,email,password,pozitie);
-                        std::cout<<"Angajatul a fost adaugat cu succes!\n";
+                        std::cout << "Ce doriti sa faceti?\n";
+                        std::cout << "1. Adaugare angajat\n";
+                        std::cout << "2. Stergere angajat\n";
+                        std::cout << "3. Afisare angajat(i)\n";
+                        std::cout << "4. Modificare date angajat\n";
+                        std::cout << "5. Logout\n";
+                        int raspuns;
+                        std::cin >> raspuns;
+                        if (raspuns == 1)
+                        {
+                            std::string nume, prenume, email, password, pozitie;
+                            std::cout << "Nume: ";
+                            std::cin >> nume;
+                            std::cout << "Prenume: ";
+                            std::cin >> prenume;
+                            std::cout << "Email: ";
+                            std::cin >> email;
+                            std::cout << "Password: ";
+                            std::cin >> password;
+                            std::cout << "Pozitie: ";
+                            std::cin >> pozitie;
+                            staff *angajat = new staff(nume, prenume, email, password, pozitie);
+                            angajati.push_back(angajat);
+                            std::cout << "Angajatul a fost adaugat cu succes!\n";
+                        }
+                        else if (raspuns == 2)
+                        {
+                            std::string numeStergere;
+                            std::cout << "Introdu numele angajatului de sters: ";
+                            std::cin >> numeStergere;
 
+                            bool found_angajat = false;
+                            for (auto it = angajati.begin(); it != angajati.end(); ++it)
+                            {
+                                if ((*it)->getNume() == numeStergere)
+                                {
+                                    delete *it;         //Elibereaza memoria
+                                    angajati.erase(it); //Sterge din vectorul de angajati
+                                    std::cout << "Angajat sters!\n";
+                                    found_angajat = true;
+                                    break;
+                                }
+                            }
+                            if (!found_angajat)
+                            {
+                                std::cout << "Angajatul cu numele " << numeStergere << " nu a fost gasit.\n";
+                            }
+                        }
+                        else if(raspuns==3)
+                        {
+                            std::cout<<"Pe cine doriti sa afisati?\n";
+                            std::cout<<"1. Toti angajatii\n";
+                            std::cout<<"2. Un angajat\n";
+                            int raspuns_afisare;
+                            std::cin>>raspuns_afisare;
+                            if(raspuns_afisare==1)
+                            {
+                                for(auto &angajat:angajati)
+                                {
+                                    std::cout<<"Nume: "<<angajat->getNume()<<"\n";
+                                    std::cout<<"Prenume: "<<angajat->getPrenume()<<"\n";
+                                    std::cout<<"Email: "<<angajat->getEmail()<<"\n";
+                                    std::cout<<"Pozitie: "<<angajat->getPozitie()<<"\n";
+                                }
+                            }
+                            else if(raspuns_afisare==2)
+                            {
+                                std::string numeAfisare;
+                                std::cout<<"Introduceti numele angajatului pe care doriti sa il afisati: ";
+                                std::cin>>numeAfisare;
+                                bool found_angajat=false;
+                                for(auto &angajat:angajati)
+                                {
+                                    if(angajat->getNume()==numeAfisare)
+                                    {
+                                        std::cout<<"Nume: "<<angajat->getNume()<<"\n";
+                                        std::cout<<"Prenume: "<<angajat->getPrenume()<<"\n";
+                                        std::cout<<"Email: "<<angajat->getEmail()<<"\n";
+                                        std::cout<<"Pozitie: "<<angajat->getPozitie()<<"\n";
+                                        found_angajat=true;
+                                        break;
+                                    }
+                                }
+                                if(!found_angajat)
+                                {
+                                    std::cout<<"Angajatul cu numele "<<numeAfisare<<" nu a fost gasit.\n";
+                                }
+                            }
+                        }
+                        else if(raspuns==5)
+                        {
+                            logout=true;
+                        }
+                        if(logout==true)
+                        {
+                            std::cout<<"Ati iesit din sesiune!\n";
+                        }
                     }
-                    std::cout<<"Doriti sa continuati sesiunea?\n";
-                    std::cout<<"Da/Nu\n";
-                    std::string da_nu_continuare_sesiune;
-                    std::cin>>da_nu_continuare_sesiune;
-                    if(da_nu_continuare_sesiune=="Nu")
+                }
+                else
+                {
+                    std::cout << "Logare nereusita!\n";
+                    std::cout << "Email sau parola gresita!\n";
+                }
+            }
+            else
+            {   
+                bool found_angajat=false;
+                for(auto &angajati:angajati)
+                {
+                    if(angajati->getEmail()==email && angajati->getPassword()==password)
                     {
-                        iesire_sesiune=true;
+                        found_angajat=true;
                     }
                     
-                    }
                 }
-                else 
+                if(found_angajat==true)
                 {
-                    std::cout<<"Logare nereusita!\n";
-                    std::cout<<"Email sau parola gresita!\n";
+                    std::cout<<"Logare reusita!\n";
+                    std::cout<<"Ce actiune doriti sa efectuati?\n";
+                    std::cout<<"1. Incarcare cont cu fonduri\n";
+                    std::cout<<"2. Incarcare cont cu abonament\n";
+                    std::cout<<"3. Incarcare cont caz special\n";
+                    std::cout<<"4.Schimbare parola cont utilizator\n";
+                    int actiune;
+                    std::cin>>actiune;
+                    if(actiune==1)
+                    {
+                        std::string id, password;
+                        std::cout<<"Introduceti ID-ul clientului: ";
+                        std::cin>>id;
+                        std::cout<<"Introduceti parola: ";
+                        password=getHiddenPassword();
+                        bool found_client=false;
+                        for (auto &client : clienti) {
+                            if (client->getId() == id && client->getPassword() == password) {
+                                found_client = true;
+                                std::cout << "Client gasit!\n";
+                                std::cout << "Introduceti suma pe care doriti sa o depuneti in cont: ";
+                                int suma;
+                                std::cin >> suma;
+                        
+                                
+                                client->depunere(suma);
+                        
+                                std::cout << "Suma a fost depusa cu succes!\n";
+                                client->afisare();
+                            }
+                        }
+                    }
+                    else if(actiune==4)
+                    {
+                        std::string id, password;
+                        std::cout<<"Introduceti ID-ul clientului: ";
+                        std::cin>>id;
+                        
+                        bool found_client=false;
+                        for (auto &client : clienti) {
+                            if (client->getId() == id) {
+                                found_client = true;
+                                //ce urmeaza sa fac(adica ce as dori sa fac): sparg bariera de protectie const(NU MERGE)
+                                std::cout << "Client gasit!\n";
+                                std::cout << "Introduceti noua parola: ";
+                                std::string new_password=getHiddenPassword();
+                                client->set_password(new_password);
+                                std::cout << "Parola a fost schimbata cu succes!\n";
+                                client->afisare();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        std::cout<<"Actiune nerecunoscuta!\n";
+                    }
                 }
             }
         }

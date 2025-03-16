@@ -54,3 +54,17 @@ Abonament: Nu
 Caz special: Da
 Caz special: Elev/Student
 Fonduri disponibile: 10 RON
+Nume: Minza
+Prenume: Lidia
+ID: MinzaLidia908
+Abonament: Nu
+Caz special: Da
+Caz special: 
+Fonduri disponibile: 100 RON
+Nume: Cheval
+Prenume: Andrei
+ID: ChevalAndrei612
+Abonament: Da
+Caz special: Da
+Caz special: 
+Fonduri disponibile: 100 RON
