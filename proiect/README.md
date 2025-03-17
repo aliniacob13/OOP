@@ -34,4 +34,5 @@ Aceasta aplicatie simuleaza un sistem de gestionare al biletelor si abonamentelo
 2. Cum pot face sa memorez obiectele create, in cazul meu, clientii si angajatii, si dupa terminarea programului?
 3. Ar exista alta modalitate mai simpla si mai clean pentru functia **getHiddenPassword**? 
 4. **Reminder for me**: Sa pun functii de afisare la clasele recent create!
-5. Daca ai intrebari, te rog sa ma contactezi la adresa [aliniacob13@yahoo.com](aliniacob13@yahoo.com)
+5. **Alt reminder**: Sa modific in asa fel incat sa nu am de doua ori abonament(Da/Nu)
+6. Daca ai intrebari, te rog sa ma contactezi la adresa [aliniacob13@yahoo.com](aliniacob13@yahoo.com)
