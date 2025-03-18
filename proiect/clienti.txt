@@ -2,43 +2,43 @@ Nume: Floroiu
 Prenume: Miruna
 ID: FloroiuMiruna200
 Password: 1234
-Abonament: Da
 Caz special: Nu
 Descriere caz special: Nu se incadreaza in niciun caz special
-Fonduri disponibile: 1000 RON
+Fonduri disponibile: 2000 RON
 Bilet: Nu
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal
+
 Nume: Cheval
 Prenume: Horatiu
 ID: ChevalHoratiu761
 Password: 0000
-Abonament: Nu
 Caz special: Nu
 Descriere caz special: Nu se incadreaza in niciun caz special
-Fonduri disponibile: 2309 RON
+Fonduri disponibile: 2559 RON
 Bilet: Nu
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal
+
 Nume: Sfetcu
 Prenume: Razvan
 ID: SfetcuRazvan6
 Password: RS123
-Abonament: Nu
 Caz special: Nu
 Descriere caz special: Nu se incadreaza in niciun caz special
 Fonduri disponibile: 9999 RON
 Bilet: Nu
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal
+
 Nume: Boriga
 Prenume: Radu
 ID: BorigaRadu181
 Password: Radu_Boriga!
-Abonament: Da
 Caz special: Nu
 Descriere caz special: Nu se incadreaza in niciun caz special
 Fonduri disponibile: 999 RON
 Bilet: Nu
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal
+
