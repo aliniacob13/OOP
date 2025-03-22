@@ -26,8 +26,8 @@ ID: SfetcuRazvan6
 Password: RS123
 Caz special: Nu
 Descriere caz special: Nu se incadreaza in niciun caz special
-Fonduri disponibile: 9999 RON
-Bilet: Nu
+Fonduri disponibile: 10004 RON
+Bilet: Da
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal
 
@@ -37,7 +37,18 @@ ID: BorigaRadu181
 Password: Radu_Boriga!
 Caz special: Nu
 Descriere caz special: Nu se incadreaza in niciun caz special
-Fonduri disponibile: 999 RON
+Fonduri disponibile: 10999 RON
+Bilet: Nu
+Abonament (portofel): Nu
+Tip abonament: Nu are abonament normal
+
+Nume: Chirita
+Prenume: Claudia
+ID: ChiritaClaudia627
+Password: 23456
+Caz special: Nu
+Descriere caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 500 RON
 Bilet: Nu
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal

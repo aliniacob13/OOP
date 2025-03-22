@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -203,7 +204,7 @@ public:
     bool getCazSpecial() const { return caz_special; }
     std::string getCaz() const { return caz; }
 
-    Portofel getPortofel() const { return portofel; }
+    Portofel &getPortofel()  { return portofel; }
     int getFonduri() const { return portofel.getFonduri(); }
     bool getAreBilet() const { return portofel.getAreBilet(); }
     bool getAreAbonamentPortofel() const { return portofel.getAreAbonament(); } // Avoids name conflict
@@ -264,7 +265,7 @@ void Portofel::afisareFonduri(const Client &client) const
 }
 std::string getHiddenPassword()
 {
-    std::cout << "Creati parola pentru contul dumneavoastra:" << std::endl;
+    std::cout << "Introduceti parola dorita:" << std::endl;
 
     // Save current terminal settings.
     struct termios oldt, newt;
@@ -320,19 +321,7 @@ std::string trimTrailing(const std::string &str, const std::string &toRemove) {
     }
     return str;
 }
-
 // Function to read clients from a file.
-// Assumes the file contains data in the following 11‐line block per client:
-//   1. "Nume: <nume>"
-//   2. "Prenume: <prenume>"
-//   3. "ID: <id>"
-//   4. "Password: <password>"
-//   5. "Caz special: <Da/Nu>"
-//   6. "Descriere caz special: <caz>"
-//   7. "Fonduri disponibile: <fonduri> RON"
-//   8. "Bilet: <Da/Nu>"
-//   9. "Abonament (portofel): <Da/Nu>"
-//  10. "Tip abonament: <tip_abonament>"
 std::vector<Client*> readClientsFromFile(const std::string &filename) {
     std::vector<Client*> clients;
     std::ifstream infile(filename);
@@ -407,12 +396,6 @@ std::vector<Client*> readClientsFromFile(const std::string &filename) {
 }
 
 // Function to read staff from a file.
-// Assumes each staff member is represented by 5 lines:
-//   1. "Nume: <nume>"
-//   2. "Prenume: <prenume>"
-//   3. "Email: <email>"
-//   4. "Password: <password>"
-//   5. "Pozitie: <pozitie>"
 std::vector<staff*> readStaffFromFile(const std::string &filename) {
     std::vector<staff*> staffList;
     std::ifstream infile(filename);
@@ -474,6 +457,8 @@ int main() {
     const int abonament_special_metro = 10;
     const int abonament_special_suprafata = 5;
     
+    std::regex email_pattern("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
+
     mijloc_transport metro("Metro", 5, 10, 30, 100);
     mijloc_transport tramvai("Tramvai", 3, 7, 25, 70);
     mijloc_transport autobuz("Autobuz", 4, 10, 27, 65);
@@ -485,11 +470,11 @@ int main() {
     
     std::cout << "Bun venit la aplicatia de transport!\n";
     staff boss("Andrei", "Paun", "apaun@yahoo.com", "1234", "Manager");
-    std::cout << boss;
+    //std::cout << boss;
     
     std::vector<Client*> clientVector = readClientsFromFile("clienti.txt");
     std::vector<staff*> staffVector = readStaffFromFile("angajati.txt");
-    clientVector.insert(clientVector.end(), clienti.begin(), clienti.end()); // add any new clients
+    clientVector.insert(clientVector.end(), clienti.begin(), clienti.end()); // adauga clientii noi la cei cititi din fisier
     
     
     
@@ -552,9 +537,10 @@ int main() {
                             std::cout << "Ce doriti sa faceti?\n";
                             std::cout << "1. Depunere bani\n";
                             std::cout << "2. Cumparare bilet\n";
-                            std::cout << "3. Cumparare abonament\n";
-                            std::cout << "4. Afisare date cont\n";
-                            std::cout << "5. Logout\n";
+                            //cumparare abonament o sa fie pentru al doilea proiect
+                            //std::cout << "3. Cumparare abonament\n";
+                            std::cout << "3. Afisare date cont\n";
+                            std::cout << "4. Logout\n";
                             int raspuns;
                             std::cin >> raspuns;
                             if (raspuns == 1) {
@@ -587,7 +573,11 @@ int main() {
                                     }
                                 }
                             }
-                            else if(raspuns==5)
+                            else if(raspuns==3)
+                            {
+                                std::cout<<*client;
+                            }
+                            else if(raspuns==4)
                             {
                                 logout=true;
                             }
@@ -623,8 +613,8 @@ int main() {
                             std::cout << "1. Adaugare angajat\n";
                             std::cout << "2. Stergere angajat\n";
                             std::cout << "3. Afisare angajat(i)\n";
-                            std::cout << "4. Modificare date angajat\n";
-                            std::cout << "5. Logout\n";
+                            //std::cout << "4. Modificare date angajat\n";
+                            std::cout << "4. Logout\n";
                             int raspuns;
                             std::cin >> raspuns;
                             if (raspuns == 1) {
@@ -634,7 +624,19 @@ int main() {
                                 std::cout << "Prenume: ";
                                 std::cin >> prenume;
                                 std::cout << "Email: ";
-                                std::cin >> email;
+                                int email_valid=0;
+                                while(email_valid==0)
+                                {
+                                    std::cin >> email;
+                                    if(std::regex_match(email, email_pattern))
+                                    {
+                                        email_valid=1;
+                                    }
+                                    else
+                                    {
+                                        std::cout<<"Email invalid! Introduceti un email valid!\n";
+                                    }
+                                }
                                 std::cout << "Password: ";
                                 std::cin >> password;
                                 std::cout << "Pozitie: ";
@@ -696,7 +698,7 @@ int main() {
                                     }
                                 }
                             }
-                            else if (raspuns == 5) {
+                            else if (raspuns == 4) {
                                 logout = true;
                             }
                             if (logout == true) {
@@ -720,9 +722,12 @@ int main() {
                         std::cout << "Logare reusita!\n";
                         std::cout << "Ce actiune doriti sa efectuati?\n";
                         std::cout << "1. Incarcare cont cu fonduri\n";
+                        //incarcare cont cu abonament/caz special o sa fie pentru al doilea proiect
+                        /*
                         std::cout << "2. Incarcare cont cu abonament\n";
                         std::cout << "3. Incarcare cont caz special\n";
-                        std::cout << "4. Schimbare parola cont utilizator\n";
+                        */
+                        std::cout << "2. Schimbare parola cont utilizator\n";
                         int actiune;
                         std::cin >> actiune;
                         if (actiune == 1) {
@@ -745,7 +750,7 @@ int main() {
                                 }
                             }
                         }
-                        else if (actiune == 4) {
+                        else if (actiune == 2) {
                             std::string id, password;
                             std::cout << "Introduceti ID-ul clientului: ";
                             std::cin >> id;
