@@ -53,3 +53,14 @@ Bilet: Nu
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal
 
+Nume: Tataru
+Prenume: Radu
+ID: TataruRadu552
+Password: 00001
+Caz special: Nu
+Descriere caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 1771 RON
+Bilet: Nu
+Abonament (portofel): Nu
+Tip abonament: Nu are abonament normal
+

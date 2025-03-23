@@ -1,15 +1,12 @@
-Nume: Vrinceanu
-Prenume: Radu
-Email: radu.vrinceanu@yahoo.com
-Password: 12345
-Pozitie: Casier
-Nume: Dobrovat
-Prenume: Anca
-Email: anca_dobrovat@yahoo.com
-Password: Anca123
-Pozitie: Controlor
 Nume: Macovei
 Prenume: Bogdan
 Email: bogdan.macovei17@yahoo.com
 Password: Bogdan_asc123
 Pozitie: Controlor
+
+Nume: Buzas
+Prenume: Radu
+Email: radu.buzas13@yahoo.com
+Password: 1234567
+Pozitie: Casier
+
