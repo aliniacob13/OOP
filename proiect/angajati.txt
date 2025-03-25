@@ -10,3 +10,33 @@ Email: radu.buzas13@yahoo.com
 Password: 1234567
 Pozitie: Casier
 
+Nume: Sfetcu
+Prenume: Razvan
+Email: razvan.sfetcu@yahoo.com
+Password: 1222
+Pozitie: Casier
+
+Nume: Balucea
+Prenume: Ruxandra
+Email: ruxandra.balucea13@yahoo.com
+Password: LogOut
+Pozitie: Casier
+
+Nume: Campian
+Prenume: Razvan
+Email: razvancampian12@yahoo.co.uk
+Password: 9999
+Pozitie: Controlor
+
+Nume: Campian
+Prenume: Razvan
+Email: razvancampian12@yahoo.co.uk
+Password: 9999
+Pozitie: Controlor
+
+Nume: Serban
+Prenume: Ruxandra
+Email: ruxandra.serban19@gmail.com
+Password: 2929
+Pozitie: Casier
+

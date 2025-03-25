@@ -11,10 +11,71 @@
 std::ofstream g("clienti.txt", std::ios::app);
 std::ofstream h("angajati.txt", std::ios::app);
 // class Portofel;
+std::string getHiddenPassword()
+{
+    std::cout << "Introduceti parola dorita:" << std::endl;
+
+    // Save current terminal settings.
+    struct termios oldt, newt;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+
+    // Turn off ECHO and canonical mode (character-by-character input)
+    newt.c_lflag &= ~(ECHO | ICANON);
+    newt.c_cc[VMIN] = 1;  // minimum number of characters to read
+    newt.c_cc[VTIME] = 0; // no timeout
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    std::string password;
+    char ch;
+    while (true)
+    {
+        // Use read() to get one character from standard input
+        if (read(STDIN_FILENO, &ch, 1) != 1)
+            break;
+
+        if (ch == '\n' || ch == '\r')
+        {
+            std::cout << std::endl;
+            break;
+        }
+        else if (ch == 127 || ch == '\b')
+        { // handle backspace (127 or '\b')
+            if (!password.empty())
+            {
+                password.pop_back();
+                // Move cursor back, overwrite the character with space, and move back again.
+                std::cout << "\b \b";
+                std::cout.flush();
+            }
+        }
+        else
+        {
+            password.push_back(ch);
+            std::cout << '*';
+            std::cout.flush();
+        }
+    }
+
+    // Restore original terminal settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return password;
+}
+std::string generateID(const std::string &nume, const std::string &prenume)
+{
+    std::string id = "";
+    id = nume + prenume;
+    int random_number_int = 0;
+    srand(time(0));
+    random_number_int = rand() % 1000 + 1;
+    std::string random_number = std::to_string(random_number_int);
+    id += random_number;
+    return id;
+}
 class staff
 {
-    const std::string nume;
-    const std::string prenume;
+    std::string nume;
+    std::string prenume;
     char *email;
     char *password;
     char *pozitie;
@@ -79,8 +140,43 @@ public:
     {
         std::cout << s;
     }
+    friend std::istream &operator>>(std::istream &, staff *&);
 };
-
+std::istream &operator>>(std::istream &is, staff *&employee)
+{
+    std::string nume, prenume, email, password, pozitie;
+    
+    std::cout << "Introduceti numele:\n";
+    is >> nume;
+    
+    std::cout << "Introduceti prenumele:\n";
+    is >> prenume;
+    
+    std::cout << "Introduceti email-ul:\n";
+    is >> email;
+    // Optional: Validate email using a regex pattern
+    std::regex email_pattern("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
+    while (!std::regex_match(email, email_pattern))
+    {
+        std::cout << "Email invalid! Introduceti un email valid:\n";
+        is >> email;
+    }
+    
+    std::cout << "Introduceti parola:\n";
+    is >> password;
+    
+    std::cout << "Introduceti pozitia:\n";
+    is >> pozitie;
+    
+    // Create a new staff object dynamically
+    employee = new staff(nume, prenume, email, password, pozitie);
+    
+    // Write the staff data to the file stream (h) and flush it
+    h << *employee;
+    h.flush();
+    
+    return is;
+}
 std::ostream &operator<<(std::ostream &stream, const staff &s)
 {
     stream << "Nume: " << s.nume << "\n";
@@ -230,8 +326,59 @@ public:
     // friend std::ofstream& operator<<(std::ofstream& os, const Client& client);
     friend std::string getTipAbonamentSpecial(const Client &client);
     friend std::ostream &operator<<(std::ostream &, const Client &);
+    friend std::istream &operator>>(std::istream &, Client *&);
 };
-
+std::istream &operator>>(std::istream &is, Client *&client)
+{
+    std::string nume, prenume;
+    
+    std::cout << "Introduceti numele\n";
+    is >> nume;
+    std::cout << "Introduceti prenumele\n";
+    is >> prenume;
+    
+    // Get the hidden password (function assumed to be defined elsewhere)
+    std::string pass = getHiddenPassword();
+    
+    // Generate a unique ID using the provided generateID() function.
+    std::string id = generateID(nume, prenume);
+    std::cout << "ID-ul dumneavoastra este: " << id << "\n";
+    
+    // In this example, we assume the abonament flag is false by default.
+    bool abonament = false;
+    
+    // Create and configure the wallet.
+    Portofel portofel;
+    bool caz_special;
+    std::string da_nu;
+    std::cout << "Te incadrezi intr-un caz special?\nIntroduceti 'Da' sau 'Nu'\n";
+    is >> da_nu;
+    if (da_nu == "Da")
+    {
+        caz_special = true;
+        std::cout << "Trebuie sa mergeti la o casa de bilete pentru a va face abonamentul special.\n";
+    }
+    else
+    {
+        caz_special = false;
+    }
+    
+    std::cout << "Introduceti suma pe care doriti sa o depuneti in cont:\n";
+    int suma;
+    is >> suma;
+    portofel.setFonduri(suma);
+    
+    // Create a new Client dynamically using the gathered data.
+    client = new Client(nume, prenume, pass, id, abonament, portofel, caz_special);
+    
+    // Write the client data to the file.
+    g << *client;
+    g.flush();
+    
+    // Add the new client to the global vectors.
+    
+    return is;
+}
 std::ostream &operator<<(std::ostream &stream, const Client &c)
 {
     stream << "Nume: " << c.nume << "\n";
@@ -248,17 +395,6 @@ std::ostream &operator<<(std::ostream &stream, const Client &c)
     return stream;
 }
 
-std::string generateID(const std::string &nume, const std::string &prenume)
-{
-    std::string id = "";
-    id = nume + prenume;
-    int random_number_int = 0;
-    srand(time(0));
-    random_number_int = rand() % 1000 + 1;
-    std::string random_number = std::to_string(random_number_int);
-    id += random_number;
-    return id;
-}
 void Portofel::afisareFonduri(const Client &client) const
 {
     std::cout << "Fonduri disponibile: " << this->fonduri << " RON\n";
@@ -267,56 +403,7 @@ void Portofel::afisareFonduri(const Client &client) const
     std::cout << "Tip abonament: " << this->tip_abonament << "\n";
     std::cout << "Tip abonament special: " << client.getCaz() << "\n";
 }
-std::string getHiddenPassword()
-{
-    std::cout << "Introduceti parola dorita:" << std::endl;
 
-    // Save current terminal settings.
-    struct termios oldt, newt;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-
-    // Turn off ECHO and canonical mode (character-by-character input)
-    newt.c_lflag &= ~(ECHO | ICANON);
-    newt.c_cc[VMIN] = 1;  // minimum number of characters to read
-    newt.c_cc[VTIME] = 0; // no timeout
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
-    std::string password;
-    char ch;
-    while (true)
-    {
-        // Use read() to get one character from standard input
-        if (read(STDIN_FILENO, &ch, 1) != 1)
-            break;
-
-        if (ch == '\n' || ch == '\r')
-        {
-            std::cout << std::endl;
-            break;
-        }
-        else if (ch == 127 || ch == '\b')
-        { // handle backspace (127 or '\b')
-            if (!password.empty())
-            {
-                password.pop_back();
-                // Move cursor back, overwrite the character with space, and move back again.
-                std::cout << "\b \b";
-                std::cout.flush();
-            }
-        }
-        else
-        {
-            password.push_back(ch);
-            std::cout << '*';
-            std::cout.flush();
-        }
-    }
-
-    // Restore original terminal settings
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return password;
-}
 // Helper function to trim a trailing substring (e.g., " RON") from a string.
 std::string trimTrailing(const std::string &str, const std::string &toRemove)
 {
@@ -514,6 +601,7 @@ int main()
             std::cin >> raspuns;
             if (raspuns == "Nu")
             {
+                /*
                 std::cout << "Introduceti numele\n";
                 std::string nume, prenume;
                 std::cin >> nume;
@@ -546,6 +634,11 @@ int main()
                 Client *client = new Client(nume, prenume, pass, id, false, portofel, caz_special);
                 g << *client;
                 g.flush();
+                clienti.push_back(client);
+                clientVector.push_back(client);
+                */
+                Client *client = nullptr;
+                std::cin>>client;
                 clienti.push_back(client);
                 clientVector.push_back(client);
             }
@@ -667,7 +760,8 @@ int main()
                             int raspuns;
                             std::cin >> raspuns;
                             if (raspuns == 1)
-                            {
+                            {   
+                                /*
                                 std::string nume, prenume, email, password, pozitie;
                                 std::cout << "Nume: ";
                                 std::cin >> nume;
@@ -692,8 +786,12 @@ int main()
                                 std::cout << "Pozitie: ";
                                 std::cin >> pozitie;
                                 staff *angajat = new staff(nume, prenume, email, password, pozitie);
+                                */
+                                staff *angajat = nullptr;
+                                std::cin>>angajat;
                                 angajati.push_back(angajat);
-                                h << *angajat;
+                                staffVector.push_back(angajat);
+                                //h << *angajat;
                                 std::cout << "Angajatul a fost adaugat cu succes!\n";
                             }
                             else if (raspuns == 2)
@@ -849,6 +947,13 @@ int main()
                 exit = true;
         }
         // end if(Client/Staff)
+        std::cout << "Doriti sa iesiti din aplicatie?\n";
+        std::string iesire;
+        std::cin >> iesire;
+        if (iesire == "Da")
+        {
+            exit = true;
+        }
     } // end while(!exit)
 
     if (!clienti.empty())

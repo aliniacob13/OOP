@@ -64,3 +64,25 @@ Bilet: Nu
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal
 
+Nume: Rusu
+Prenume: Cristian
+ID: RusuCristian989
+Password: xxxx
+Caz special: Nu
+Descriere caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 1192 RON
+Bilet: Da
+Abonament (portofel): Nu
+Tip abonament: Nu are abonament normal
+
+Nume: Chirita
+Prenume: Leonard
+ID: ChiritaLeonard887
+Password: fizica12
+Caz special: Nu
+Descriere caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 20 RON
+Bilet: Nu
+Abonament (portofel): Nu
+Tip abonament: Nu are abonament normal
+
