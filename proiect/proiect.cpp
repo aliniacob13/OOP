@@ -601,7 +601,6 @@ int main()
     mijloc_transport metro("Metro", 5, 10, 30, 100);
     mijloc_transport tramvai("Tramvai", 3, 7, 25, 70);
     mijloc_transport autobuz("Autobuz", 4, 10, 27, 65);
-    std::cout << "Pretul unui bilet de tramvai este: " << tramvai.getPretBilet() << " RON\n";
 
     std::vector<Client *> clienti;
     std::vector<staff *> angajati;
