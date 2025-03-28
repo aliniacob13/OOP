@@ -34,9 +34,3 @@ Email: razvancampian12@yahoo.co.uk
 Password: 9999
 Pozitie: Controlor
 
-Nume: Serban
-Prenume: Ruxandra
-Email: ruxandra.serban19@gmail.com
-Password: 2929
-Pozitie: Casier
-

@@ -86,3 +86,36 @@ Bilet: Nu
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal
 
+Nume: Palmer
+Prenume: Cole
+ID: PalmerCole4
+Password: IceCold
+Caz special: Nu
+Descriere caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 1000000 RON
+Bilet: Nu
+Abonament (portofel): Nu
+Tip abonament: Nu are abonament normal
+
+Nume: Dascalescu
+Prenume: Sorin
+ID: DascalescuSorin280
+Password: 1919
+Caz special: Nu
+Descriere caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 667 RON
+Bilet: Da
+Abonament (portofel): Nu
+Tip abonament: Nu are abonament normal
+
+Nume: Stan
+Prenume: Flavius
+ID: StanFlavius981
+Password: 2929
+Caz special: Nu
+Descriere caz special: Nu se incadreaza in niciun caz special
+Fonduri disponibile: 200 RON
+Bilet: Nu
+Abonament (portofel): Nu
+Tip abonament: Nu are abonament normal
+

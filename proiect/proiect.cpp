@@ -113,9 +113,15 @@ public:
     std::string getEmail() const { return email; }
     std::string getPassword() const { return password; }
     std::string getPozitie() const { return pozitie; }
-    /// i need to add a function that can change the password(cu pointeri ca sa pot distruge bariera de protectie)
-    /// vezi curs paun ca sa vezi cum se face
-
+    
+    void set_nume(const std::string &new_nume)
+    {
+        nume = new_nume;
+    }
+    void set_prenume(const std::string &new_prenume)
+    {
+        prenume = new_prenume;
+    }
     void set_password(const std::string &new_password)
     {
         delete[] password; // free old memory
@@ -145,13 +151,13 @@ public:
 std::istream &operator>>(std::istream &is, staff *&employee)
 {
     std::string nume, prenume, email, password, pozitie;
-    
+
     std::cout << "Introduceti numele:\n";
     is >> nume;
-    
+
     std::cout << "Introduceti prenumele:\n";
     is >> prenume;
-    
+
     std::cout << "Introduceti email-ul:\n";
     is >> email;
     // Optional: Validate email using a regex pattern
@@ -161,20 +167,20 @@ std::istream &operator>>(std::istream &is, staff *&employee)
         std::cout << "Email invalid! Introduceti un email valid:\n";
         is >> email;
     }
-    
+
     std::cout << "Introduceti parola:\n";
     is >> password;
-    
+
     std::cout << "Introduceti pozitia:\n";
     is >> pozitie;
-    
+
     // Create a new staff object dynamically
     employee = new staff(nume, prenume, email, password, pozitie);
-    
+
     // Write the staff data to the file stream (h) and flush it
     h << *employee;
     h.flush();
-    
+
     return is;
 }
 std::ostream &operator<<(std::ostream &stream, const staff &s)
@@ -295,7 +301,23 @@ public:
     {
         this->password = password;
     }
-
+    void set_id(std::string id)
+    {
+        this->id = id;
+    }
+    void set_are_abonament(bool are_abonament)
+    {
+        this->are_abonament = are_abonament;
+    }
+    void set_caz_special(bool caz_special)
+    {
+        this->caz_special = caz_special;
+    }
+    void set_caz(std::string caz)
+    {
+        this->caz = caz;
+    }
+    // gettere
     std::string getNume() const { return nume; }
     std::string getPrenume() const { return prenume; }
     std::string getPassword() const { return password; }
@@ -331,28 +353,32 @@ public:
 std::istream &operator>>(std::istream &is, Client *&client)
 {
     std::string nume, prenume;
-    
+
     std::cout << "Introduceti numele\n";
     is >> nume;
     std::cout << "Introduceti prenumele\n";
     is >> prenume;
-    
+
     // Get the hidden password (function assumed to be defined elsewhere)
     std::string pass = getHiddenPassword();
-    
+
     // Generate a unique ID using the provided generateID() function.
     std::string id = generateID(nume, prenume);
     std::cout << "ID-ul dumneavoastra este: " << id << "\n";
-    
+
     // In this example, we assume the abonament flag is false by default.
     bool abonament = false;
-    
+
     // Create and configure the wallet.
     Portofel portofel;
     bool caz_special;
     std::string da_nu;
-    std::cout << "Te incadrezi intr-un caz special?\nIntroduceti 'Da' sau 'Nu'\n";
-    is >> da_nu;
+    std::cout << "Te incadrezi intr-un caz special?\n";
+    while(da_nu != "Da" && da_nu != "Nu")
+    {
+        std::cout << "Introduceti 'Da' sau 'Nu'\n";
+        is >> da_nu;
+    }
     if (da_nu == "Da")
     {
         caz_special = true;
@@ -362,21 +388,21 @@ std::istream &operator>>(std::istream &is, Client *&client)
     {
         caz_special = false;
     }
-    
+
     std::cout << "Introduceti suma pe care doriti sa o depuneti in cont:\n";
     int suma;
     is >> suma;
     portofel.setFonduri(suma);
-    
+
     // Create a new Client dynamically using the gathered data.
     client = new Client(nume, prenume, pass, id, abonament, portofel, caz_special);
-    
+
     // Write the client data to the file.
     g << *client;
     g.flush();
-    
+
     // Add the new client to the global vectors.
-    
+
     return is;
 }
 std::ostream &operator<<(std::ostream &stream, const Client &c)
@@ -593,12 +619,22 @@ int main()
     {
         std::cout << "Client/Staff?\n";
         std::string client_staff;
-        std::cin >> client_staff;
+        while(client_staff != "Client" && client_staff != "Staff")
+        {
+            std::cout << "Introduceti 'Client' sau 'Staff'\n";
+            std::cin >> client_staff;
+        }
+        //std::cin >> client_staff;
         if (client_staff == "Client")
         {
             std::string raspuns;
             std::cout << "Ai cont?\n";
-            std::cin >> raspuns;
+            while(raspuns != "Da" && raspuns != "Nu")
+            {
+                std::cout << "Introduceti 'Da' sau 'Nu'\n";
+                std::cin >> raspuns;
+            }
+            
             if (raspuns == "Nu")
             {
                 /*
@@ -638,7 +674,7 @@ int main()
                 clientVector.push_back(client);
                 */
                 Client *client = nullptr;
-                std::cin>>client;
+                std::cin >> client;
                 clienti.push_back(client);
                 clientVector.push_back(client);
             }
@@ -648,8 +684,7 @@ int main()
                 std::string id, password;
                 std::cout << "ID: ";
                 std::cin >> id;
-                std::cout << "Password: ";
-                std::cin >> password;
+                password=getHiddenPassword();
                 bool found_cont_client = false;
                 for (auto &client : clientVector)
                 {
@@ -721,7 +756,7 @@ int main()
                 }
             }
         }
-        else
+        else if(client_staff == "Staff")
         {
             {
                 std::cout << "Sign in\n";
@@ -734,7 +769,7 @@ int main()
                 std::cout << "Email: ";
                 std::cin >> email;
                 std::cout << "Password: ";
-                std::cin >> password;
+                password=getHiddenPassword();
                 bool found = false;
                 std::string prenume_nume = prenume + " " + nume;
                 if (prenume_nume == "Andrei Paun")
@@ -760,7 +795,7 @@ int main()
                             int raspuns;
                             std::cin >> raspuns;
                             if (raspuns == 1)
-                            {   
+                            {
                                 /*
                                 std::string nume, prenume, email, password, pozitie;
                                 std::cout << "Nume: ";
@@ -788,10 +823,10 @@ int main()
                                 staff *angajat = new staff(nume, prenume, email, password, pozitie);
                                 */
                                 staff *angajat = nullptr;
-                                std::cin>>angajat;
+                                std::cin >> angajat;
                                 angajati.push_back(angajat);
                                 staffVector.push_back(angajat);
-                                //h << *angajat;
+                                // h << *angajat;
                                 std::cout << "Angajatul a fost adaugat cu succes!\n";
                             }
                             else if (raspuns == 2)
@@ -938,6 +973,11 @@ int main()
                             std::cout << "Actiune nerecunoscuta!\n";
                         }
                     }
+                    else if(found_angajat == false)
+                    {
+                        std::cout << "Logare nereusita!\n";
+                        std::cout << "Email sau parola gresita!\n";
+                    }
                 }
             } // end outer else for staff sign in
             std::cout << "Continuati?\n";
@@ -946,6 +986,7 @@ int main()
             if (continuare == "Nu")
                 exit = true;
         }
+        
         // end if(Client/Staff)
         std::cout << "Doriti sa iesiti din aplicatie?\n";
         std::string iesire;
