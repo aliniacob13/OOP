@@ -35,4 +35,7 @@ Aceasta aplicatie simuleaza un sistem de gestionare al biletelor si abonamentelo
 3. Ar exista alta modalitate mai simpla si mai clean pentru functia **getHiddenPassword**? 
 4. **Reminder for me**: Sa pun functii de afisare la clasele recent create!
 5. **Alt reminder**: Sa modific in asa fel incat sa nu am de doua ori abonament(Da/Nu)
-6. Daca ai intrebari, te rog sa ma contactezi la adresa [aliniacob13@yahoo.com](aliniacob13@yahoo.com)
+### Proiect 1
+1. **Constrangere** Desi apare ca un client isi poate lua abonament, inca nu am implementat aceasta modalitate. O voi implementa pentru proiectul al 2-lea
+2. Am asumat in mai multe cazuri faptul ca lumea tasteaza corect unele date
+7. Daca ai intrebari, te rog sa ma contactezi la adresa [aliniacob13@yahoo.com](aliniacob13@yahoo.com)
