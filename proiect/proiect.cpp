@@ -8,9 +8,14 @@
 #include <ctime>
 #include <termios.h> // pentru termios, tcsetattr, tcgetattr
 #include <unistd.h>  // pentru STDIN_FILENO
-#include <cctype>   
-std::ofstream g("clienti.txt", std::ios::app);
-std::ofstream h("angajati.txt", std::ios::app);
+#include <cctype>
+#include "Staff.hpp"
+#include "Client.hpp"
+#include "Portofel.hpp" 
+#include "Portofel.cpp"
+#include "Client.cpp"  
+//std::ofstream g("clienti.txt", std::ios::app);
+//std::ofstream h("angajati.txt", std::ios::app);
 // class Portofel;
 std::string toLower(const std::string &s) {
     std::string result = s;
@@ -19,6 +24,7 @@ std::string toLower(const std::string &s) {
     }
     return result;
 }
+/*
 std::string getHiddenPassword()
 {
     std::cout << "Introduceti parola:" << std::endl;
@@ -80,125 +86,7 @@ std::string generateID(const std::string &nume, const std::string &prenume)
     id += random_number;
     return id;
 }
-class staff
-{
-    std::string nume;
-    std::string prenume;
-    char *email;
-    char *password;
-    char *pozitie;
-
-public:
-    staff(const std::string &nume, const std::string &prenume,
-          const std::string &emailStr, const std::string &passwordStr,
-          const std::string &pozitieStr) : nume(nume), prenume(prenume)
-    {
-        email = new char[emailStr.size() + 1];
-        std::strcpy(email, emailStr.c_str());
-        password = new char[passwordStr.size() + 1];
-        std::strcpy(password, passwordStr.c_str());
-        pozitie = new char[pozitieStr.size() + 1];
-        std::strcpy(pozitie, pozitieStr.c_str());
-    }
-    staff(const staff &other)
-        : nume(other.nume), prenume(other.prenume)
-    {
-        email = new char[std::strlen(other.email) + 1];
-        std::strcpy(email, other.email);
-        password = new char[std::strlen(other.password) + 1];
-        std::strcpy(password, other.password);
-        pozitie = new char[std::strlen(other.pozitie) + 1];
-        std::strcpy(pozitie, other.pozitie);
-    }
-    ~staff()
-    {
-        delete[] email;
-        delete[] password;
-        delete[] pozitie;
-    }
-    std::string getNume() const { return nume; }
-    std::string getPrenume() const { return prenume; }
-    std::string getEmail() const { return email; }
-    std::string getPassword() const { return password; }
-    std::string getPozitie() const { return pozitie; }
-
-    void set_nume(const std::string &new_nume)
-    {
-        nume = new_nume;
-    }
-    void set_prenume(const std::string &new_prenume)
-    {
-        prenume = new_prenume;
-    }
-    void set_password(const std::string &new_password)
-    {
-        delete[] password;
-        password = new char[new_password.size() + 1];
-        std::strcpy(password, new_password.c_str());
-    }
-    void set_pozitie(const std::string &new_pozitie)
-    {
-        delete[] pozitie; // elibereaza memoria veche
-        pozitie = new char[new_pozitie.size() + 1];
-        std::strcpy(pozitie, new_pozitie.c_str());
-    }
-    void set_email(const std::string &new_email)
-    {
-        delete[] email; // elibereaza memoria veche
-        email = new char[new_email.size() + 1];
-        std::strcpy(email, new_email.c_str());
-    }
-    friend std::ostream &operator<<(std::ostream &, const staff &);
-    // friend std::istream& operator>>(std::istream&, staff&);
-    void afisare_staff(staff s)
-    {
-        std::cout << s;
-    }
-    friend std::istream &operator>>(std::istream &, staff *&);
-};
-std::istream &operator>>(std::istream &is, staff *&employee)
-{
-    std::string nume, prenume, email, password, pozitie;
-
-    std::cout << "Introduceti numele:\n";
-    is >> nume;
-
-    std::cout << "Introduceti prenumele:\n";
-    is >> prenume;
-
-    std::cout << "Introduceti email-ul:\n";
-    is >> email;
-    std::regex email_pattern("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
-    while (!std::regex_match(email, email_pattern))
-    {
-        std::cout << "Email invalid! Introduceti un email valid:\n";
-        is >> email;
-    }
-
-    std::cout << "Introduceti parola:\n";
-    is >> password;
-
-    std::cout << "Introduceti pozitia:\n";
-    is >> pozitie;
-
-    // creaza obiect dinamic
-    employee = new staff(nume, prenume, email, password, pozitie);
-
-    h << *employee;
-    h.flush();
-
-    return is;
-}
-std::ostream &operator<<(std::ostream &stream, const staff &s)
-{
-    stream << "Nume: " << s.nume << "\n";
-    stream << "Prenume: " << s.prenume << "\n";
-    stream << "Email: " << s.email << "\n";
-    stream << "Password: " << s.password << "\n";
-    stream << "Pozitie: " << s.pozitie << "\n";
-    return stream;
-}
-
+*/
 class mijloc_transport
 {
     const std::string tip;
@@ -218,231 +106,6 @@ public:
     std::string getTip() const { return tip; }
     int getPretBilet() const { return pret_bilet; }
 };
-class Client;
-class Portofel
-{
-    int fonduri;
-    // bilete_abonamente *Achizitii;
-    bool are_bilet;
-    bool are_abonament;
-    std::string tip_abonament;
-
-public:
-    Portofel(int fonduri = 0, bool are_bilet = false, bool are_abonament = false, std::string tip_abonament = "Nu are abonament normal")
-    {
-        this->fonduri = fonduri;
-        this->are_bilet = are_bilet;
-        this->are_abonament = are_abonament;
-        this->tip_abonament = tip_abonament;
-    }
-    Portofel(const Portofel &portofel)
-    {
-        this->fonduri = portofel.fonduri;
-        this->are_bilet = portofel.are_bilet;
-        this->are_abonament = portofel.are_abonament;
-        this->tip_abonament = portofel.tip_abonament;
-    }
-    ~Portofel()
-    {
-    }
-    // getter
-    int getFonduri() const { return fonduri; }
-    bool getAreBilet() const { return are_bilet; }
-    bool getAreAbonament() const { return are_abonament; }
-    std::string getTipAbonament() const { return tip_abonament; }
-    // setter
-    void setFonduri(int fonduri)
-    {
-        this->fonduri = fonduri;
-    }
-    void depunere(int suma)
-    {
-        this->fonduri += suma;
-    }
-    void set_are_bilet(bool are_bilet)
-    {
-        this->are_bilet = are_bilet;
-    }
-
-    void afisareFonduri(const Client &client) const;
-};
-
-class Client
-{
-    std::string nume;
-    std::string prenume;
-    std::string password;
-    std::string id;
-    bool are_abonament;
-    Portofel portofel;
-    bool caz_special;
-    std::string caz;
-
-public:
-    Client(std::string nume, std::string prenume, std::string password, std::string id, bool are_abonament, Portofel portofel, bool caz_special = false, std::string caz = "Nu se incadreaza in niciun caz special")
-    {
-        this->nume = nume;
-        this->prenume = prenume;
-        this->password = password;
-        this->id = id;
-        this->are_abonament = are_abonament;
-        this->portofel = portofel;
-        this->caz_special = caz_special;
-        this->caz = caz;
-        // std::cout << "Contul a fost creat cu succes!\n";
-    }
-    Client(const Client &client)
-    {
-        this->nume = client.nume;
-        this->prenume = client.prenume;
-        this->password = client.password;
-        this->id = client.id;
-        this->are_abonament = client.are_abonament;
-        this->portofel = client.portofel;
-        this->caz_special = client.caz_special;
-        this->caz = client.caz;
-    }
-    // settere
-    void set_password(std::string password)
-    {
-        this->password = password;
-    }
-    void set_id(std::string id)
-    {
-        this->id = id;
-    }
-    void set_are_abonament(bool are_abonament)
-    {
-        this->are_abonament = are_abonament;
-    }
-    void set_caz_special(bool caz_special)
-    {
-        this->caz_special = caz_special;
-    }
-    void set_caz(std::string caz)
-    {
-        this->caz = caz;
-    }
-    // gettere
-    std::string getNume() const { return nume; }
-    std::string getPrenume() const { return prenume; }
-    std::string getPassword() const { return password; }
-    std::string getId() const { return id; }
-    bool getAreAbonament() const { return are_abonament; }
-    bool getCazSpecial() const { return caz_special; }
-    std::string getCaz() const { return caz; }
-
-    Portofel &getPortofel() { return portofel; }
-    int getFonduri() const { return portofel.getFonduri(); }
-    bool getAreBilet() const { return portofel.getAreBilet(); }
-    bool getAreAbonamentPortofel() const { return portofel.getAreAbonament(); } // Avoids name conflict
-    std::string getTipAbonament() const { return portofel.getTipAbonament(); }
-    void afisare() const
-    {
-        std::cout << "Client: " << nume << " " << prenume << "\n";
-        std::cout << "ID: " << id << "\n";
-        std::cout << "Abonament: " << (are_abonament ? "Da" : "Nu") << "\n";
-        std::cout << "Caz special: " << (caz_special ? "Da" : "Nu") << "\n";
-        portofel.afisareFonduri(*this);
-    }
-    ~Client() {}
-    void depunere(int suma)
-    {
-        portofel.depunere(suma);
-    }
-    friend std::string generateID(const std::string &nume, const std::string &prenume);
-    // friend std::ofstream& operator<<(std::ofstream& os, const Client& client);
-    friend std::string getTipAbonamentSpecial(const Client &client);
-    friend std::ostream &operator<<(std::ostream &, const Client &);
-    friend std::istream &operator>>(std::istream &, Client *&);
-
-    
-    Client& operator+=(int bilet) {
-        this->getPortofel().set_are_bilet(true);
-        this->getPortofel().setFonduri(this->portofel.getFonduri() - bilet);
-        return *this;
-    }
-
-    
-};
-std::istream &operator>>(std::istream &is, Client *&client)
-{
-
-    std::string nume, prenume;
-
-    std::cout << "Introduceti numele\n";
-    is >> nume;
-    std::cout << "Introduceti prenumele\n";
-    is >> prenume;
-
-    std::string pass = getHiddenPassword();
-
-    std::string id = generateID(nume, prenume);
-    std::cout << "ID-ul dumneavoastra este: " << id << "\n";
-
-    bool abonament = false;
-
-    Portofel portofel;
-    bool caz_special;
-    std::string da_nu;
-    std::cout << "Te incadrezi intr-un caz special?\n";
-    while (da_nu != "Da" && da_nu != "Nu")
-    {
-        std::cout << "Introduceti 'Da' sau 'Nu'\n";
-        is >> da_nu;
-    }
-    if (da_nu == "Da")
-    {
-        caz_special = true;
-        std::cout << "Trebuie sa mergeti la o casa de bilete pentru a va face abonamentul special.\n";
-    }
-    else
-    {
-        caz_special = false;
-    }
-
-    std::cout << "Introduceti suma pe care doriti sa o depuneti in cont:\n";
-    int suma=-3;
-
-    while(suma<0)
-    {
-        is >> suma;
-        if(suma<0)
-            std::cout<<"Suma nu poate fi negativa. Introduceti o suma valida:\n";
-    }
-    portofel.setFonduri(suma);
-
-    client = new Client(nume, prenume, pass, id, abonament, portofel, caz_special);
-
-    g << *client;
-    g.flush();
-
-    return is;
-}
-std::ostream &operator<<(std::ostream &stream, const Client &c)
-{
-    stream << "Nume: " << c.nume << "\n";
-    stream << "Prenume: " << c.prenume << "\n";
-    stream << "ID: " << c.id << "\n"; 
-    stream << "Password: " << c.password << "\n";
-    // stream << "Abonament: " << (c.are_abonament ? "Da" : "Nu") << "\n";
-    stream << "Caz special: " << (c.caz_special ? "Da" : "Nu") << "\n";
-    stream << "Descriere caz special: " << c.caz << "\n";
-    stream << "Fonduri disponibile: " << c.portofel.getFonduri() << " RON\n";
-    stream << "Bilet: " << (c.portofel.getAreBilet() ? "Da" : "Nu") << "\n";
-    stream << "Abonament (portofel): " << (c.portofel.getAreAbonament() ? "Da" : "Nu") << "\n";
-    stream << "Tip abonament: " << c.portofel.getTipAbonament() << "\n";
-    return stream;
-}
-
-void Portofel::afisareFonduri(const Client &client) const
-{
-    std::cout << "Fonduri disponibile: " << this->fonduri << " RON\n";
-    std::cout << "Bilet: " << (this->are_bilet ? "Da" : "Nu") << "\n";
-    std::cout << "Abonament: " << (this->are_abonament ? "Da" : "Nu") << "\n";
-    std::cout << "Tip abonament: " << this->tip_abonament << "\n";
-    std::cout << "Tip abonament special: " << client.getCaz() << "\n";
-}
 
 std::string trimTrailing(const std::string &str, const std::string &toRemove)
 {
@@ -578,7 +241,8 @@ void updateStaffFile(const std::vector<staff *> &staffMembers, const std::string
     outfile.close();
 }
 int main()
-{
+{   
+
     const int bilet_metro = 5;
     const int bilet_suprafata = 3;
     const int abonament_metro_luna = 100;
@@ -615,7 +279,7 @@ int main()
     {
         std::string client_staff;
         std::cout << "Client/Staff?\n";
-        while (toLower(client_staff) != "client" && toLower(client_staff) != "Staff")
+        while (toLower(client_staff) != "client" && toLower(client_staff) != "staff")
         {
             std::cout << "Introduceti 'Client' sau 'Staff'\n";
             std::cin >> client_staff;

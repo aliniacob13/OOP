@@ -4,8 +4,8 @@ ID: FloroiuMiruna200
 Password: 1234
 Caz special: Nu
 Descriere caz special: Nu se incadreaza in niciun caz special
-Fonduri disponibile: 2000 RON
-Bilet: Nu
+Fonduri disponibile: 2290 RON
+Bilet: Da
 Abonament (portofel): Nu
 Tip abonament: Nu are abonament normal
 
