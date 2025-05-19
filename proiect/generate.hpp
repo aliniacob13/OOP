@@ -1,12 +1,15 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include<fstream>
-#include "Client.hpp"
-#include "Portofel.hpp"
-#include <termios.h> // pentru termios, tcsetattr, tcgetattr
-#include <unistd.h>  // pentru STDIN_FILENO
-std::string generateID(const std::string &nume, const std::string &prenume)
+
+#include <termios.h> 
+#include <unistd.h>  
+class generateHelper{
+public:
+static std::string generateID(const std::string &nume, const std::string &prenume);
+static std::string getHiddenPassword();
+};
+std::string generateHelper::generateID(const std::string &nume, const std::string &prenume)
 {
     std::string id = "";
     id = nume + prenume;
@@ -18,7 +21,7 @@ std::string generateID(const std::string &nume, const std::string &prenume)
     return id;
 }
 
-std::string getHiddenPassword()
+std::string generateHelper::getHiddenPassword()
 {
     std::cout << "Introduceti parola:" << std::endl;
 

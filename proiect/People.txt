@@ -1,0 +1,70 @@
+Caz: Student
+Nume: Popa
+Prenume: Leonida
+ID: PopaLeonida525
+Password: 2020
+Fonduri: 6049 RON
+Bilete Bus: 2
+Bilete Metro: 61
+Bilete Bus Gratuite: 0
+Bilete Metro Gratuite: 0
+Bilete Consumate Bus: 0
+Bilete Consumate Metro: 0
+CNP: 909781342
+Student ID: PO000
+Caz: CazNormal
+Nume: Sfetcu
+Prenume: Razvan
+ID: SfetcuRazvan104
+Password: 0000
+Fonduri: 110 RON
+Bilete Bus: 60
+Bilete Metro: 0
+Bilete Bus Gratuite: 0
+Bilete Metro Gratuite: 0
+Bilete Consumate Bus: 0
+Bilete Consumate Metro: 0
+Caz: CazNormal
+Nume: Dan
+Prenume: Nicusor
+ID: DanNicusor346
+Password: 2909
+Fonduri: 2000 RON
+Bilete Bus: 0
+Bilete Metro: 0
+Bilete Bus Gratuite: 0
+Bilete Metro Gratuite: 0
+Bilete Consumate Bus: 0
+Bilete Consumate Metro: 0
+Caz: CazNormal
+Nume: Tataru
+Prenume: Radu
+ID: TataruRadu641
+Password: 2000
+Fonduri: 300 RON
+Bilete Bus: 0
+Bilete Metro: 0
+Bilete Bus Gratuite: 0
+Bilete Metro Gratuite: 0
+Bilete Consumate Bus: 0
+Bilete Consumate Metro: 0
+Caz: CazNormal
+Nume: Leoapa
+Prenume: Diana
+ID: LeoapaDiana158
+Password: 9898
+Fonduri: 2890 RON
+Bilete Bus: 0
+Bilete Metro: 58
+Bilete Bus Gratuite: 0
+Bilete Metro Gratuite: 0
+Bilete Consumate Bus: 0
+Bilete Consumate Metro: 0
+Caz: Pensionar
+Nume: Lucas
+Prenume: Manea
+ID: LucasManea797
+Password: 1111
+Fonduri: 100000 RON
+CNP: 9098765234
+ID Talon: 12PO
